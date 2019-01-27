@@ -5,17 +5,33 @@ import radio
 
 # The radio won't work unless it's switched on.
 radio.on()
+radio.config(channel=19)        # Choose your own channel number
+radio.config(power=7)           # Turn the signal up to full strengt
+
+def receiveRadioBehauviour():
+    global bmodeA
+    global myLastReceivedRadio
+    global incoming
+    incoming = radio.receive()
+    # incoming = radio.receive_full()
+    if incoming is not None:
+        if incoming == 'alienBeat_0':
+            print(incoming)
+            myLastReceivedRadio = running_time()
+            bmodeA = 1
+            simulatorPulseNeo( )
 
 def ifCoitusInterruptus():
-    global bmodeA
-    if button_a.was_pressed() and button_b.was_pressed():
+    receiveRadioBehauviour()
+    #global bmodeA
+    #if button_a.was_pressed() and button_b.was_pressed():
         #Check anytime any moment this for quick exit
-        bmodeA = bmodeA * -1
-        print("chaging mode")
-        return
+    #    bmodeA = bmodeA * -1
+    #    print("chaging mode")
+    #    return
 
 def fadeInFadeOut(auxMinB1, auxMaxB1, auxMinB2, auxMaxB2, auxIncUp, auxIncDown, auxDelay):
-    ifCoitusInterruptus()
+    # ifCoitusInterruptus()
     for i in range(auxMinB1, auxMaxB1+1, auxIncUp):
         for led_id in range(len(np)):
             np[led_id] = (i, 0, 0)
@@ -37,8 +53,9 @@ flatSignal = Image("00000:"
 
 display.show(Image.HEART)
 
+#General Vars
 np = neopixel.NeoPixel(pin1, 8)
-
+incoming = radio.receive()
 
 
 # Vars MODEA
@@ -92,7 +109,8 @@ def simulatorPulseNeo( ):
         for i in range(len(np)):
             np[i] = (0, 0, 0)
         np.show()
-        sleep(timePulse)
+        print("Black ")
+        #sleep(timePulse)
         stat = 0
 
     if button_a.get_presses() > 0:
@@ -141,6 +159,7 @@ def simulatorFade( _timeFading ):
 
     return
 
+
 # my alien vars comunication
 myLastReceivedRadio = running_time()
 
@@ -153,21 +172,26 @@ while True:
 
     if bmodeA == 1:
         print("bmodeA")
-        simulatorPulseNeo( )
+        # simulatorPulseNeo( )
+        pass
     else:
         print("bmodeB")
         simulatorFade( timeFading )
 
+    receiveRadioBehauviour()
+
     # If receive Pulse Radio "alienBeat_0" then change to this behauviour while is receiving this input
     # incoming = radio.receive()
-    incoming = radio.receive_full()
-    if incoming == 'alienBeat_0':
-        print("received alienBeat_0")
-        receivedPuseTimeGap = running_time() - myLastReceivedRadio
-        if receivedPuseTimeGap < 20000 and receivedPuseTimeGap > 300:
+    # incoming = radio.receive_full()
+    # if incoming == 'alienBeat_0':
+    #     print("received alienBeat_0")
+    #     print("bmodeA")
+    #     bmodeA = 1
+    #     simulatorPulseNeo( )
+        # receivedPuseTimeGap = running_time() - myLastReceivedRadio
+        # if receivedPuseTimeGap < 20000 and receivedPuseTimeGap > 300:
             # a credible pulse received
-            timePulse = receivedPuseTimeGap
+        #    timePulse = receivedPuseTimeGap
 
-        myLastReceivedRadio = running_time()
-        bmodeA = 1
-
+        # myLastReceivedRadio = running_time()
+        # bmodeA = 1
