@@ -15,7 +15,7 @@ def receiveRadioBehauviour():
     incoming = radio.receive()
     # incoming = radio.receive_full()
     if incoming is not None:
-        if incoming == 'alienBeat_0':
+        if incoming == 'alienBeat_1':
             print(incoming)
             myLastReceivedRadio = running_time()
             bmodeA = 1
@@ -34,7 +34,7 @@ def fadeInFadeOut(auxMinB1, auxMaxB1, auxMinB2, auxMaxB2, auxIncUp, auxIncDown, 
     # ifCoitusInterruptus()
     for i in range(auxMinB1, auxMaxB1+1, auxIncUp):
         for led_id in range(len(np)):
-            np[led_id] = (i, 0, 0)
+            np[led_id] = (0, i, 0)
         np.show()
         sleep(auxDelay)
     # fade out counterPeriod/2
