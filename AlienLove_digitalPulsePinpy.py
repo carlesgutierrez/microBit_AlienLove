@@ -24,7 +24,7 @@ def chooseNewIdUp():
     global noOneThereTime
     noOneThereTime = running_time()
     nextMicroBit_Id = nextMicroBit_Id+1
-    if nextMicroBit_Id > 7:
+    if nextMicroBit_Id > 4:
         nextMicroBit_Id = 0
     print("Next ID Up ",nextMicroBit_Id)
 
@@ -34,14 +34,14 @@ def chooseNewIdDown():
     noOneThereTime = running_time()
     nextMicroBit_Id = nextMicroBit_Id-1
     if nextMicroBit_Id < 0:
-        nextMicroBit_Id = 7
+        nextMicroBit_Id = 4
     print("Next ID Down ",nextMicroBit_Id)
 
 def chooseNewIdRandom():
     global nextMicroBit_Id
     global noOneThereTime
     noOneThereTime = running_time()
-    nextMicroBit_Id = random.randint(0,7)
+    nextMicroBit_Id = random.randint(0,4)
     print("Next ID Random ",nextMicroBit_Id)
 
 def sendRadioPulse():
@@ -64,10 +64,10 @@ while True:
         if (running_time() - timeEllapsedPulse) > 700:
             sendRadioPulse()
         else:
-            print("Error too quick pulse")
+            print("Filtering too quick pulse")
 
     else:
         display.show(nextMicroBit_Id)
-        if (running_time() - noOneThereTime) > 5000:
+        if (running_time() - noOneThereTime) > 7000:
             # choose new ID
             chooseNewIdRandom()

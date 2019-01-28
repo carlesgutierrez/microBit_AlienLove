@@ -8,39 +8,60 @@ radio.on()
 radio.config(channel=19)        # Choose your own channel number
 radio.config(power=7)           # Turn the signal up to full strengt
 
+#General Vars
+np = neopixel.NeoPixel(pin1, 8)
+incoming = radio.receive()
+idGeneral = 4
+tagReveicer = 'alienBeat_'+str(idGeneral)
+
+#0 (rojo) #1 (verde) #2(azul) #(3)amarillo #4(turquesa) #5(lila)
+idColorType = 2
+
 def receiveRadioBehauviour():
     global bmodeA
     global myLastReceivedRadio
     global incoming
     incoming = radio.receive()
-    # incoming = radio.receive_full()
+    #incoming = radio.receive_full()
     if incoming is not None:
-        if incoming == 'alienBeat_1':
+        if incoming == tagReveicer:
             print(incoming)
             myLastReceivedRadio = running_time()
             bmodeA = 1
             simulatorPulseNeo( )
 
-def ifCoitusInterruptus():
-    receiveRadioBehauviour()
-    #global bmodeA
-    #if button_a.was_pressed() and button_b.was_pressed():
-        #Check anytime any moment this for quick exit
-    #    bmodeA = bmodeA * -1
-    #    print("chaging mode")
-    #    return
-
 def fadeInFadeOut(auxMinB1, auxMaxB1, auxMinB2, auxMaxB2, auxIncUp, auxIncDown, auxDelay):
-    # ifCoitusInterruptus()
     for i in range(auxMinB1, auxMaxB1+1, auxIncUp):
         for led_id in range(len(np)):
-            np[led_id] = (0, i, 0)
+            if idColorType == 0:
+                np[led_id] = (i, 0, 0) # rojo
+            elif idColorType == 1:
+                np[led_id] = (0, i, 0) # verde
+            elif idColorType == 2:
+                np[led_id] = (0, 0, i) # azul
+            elif idColorType == 3:
+                np[led_id] = (i, i, 0) # amarillo
+            elif idColorType == 4:
+                np[led_id] = (0, i, i) # turquesa
+            elif idColorType == 5:
+                np[led_id] = (i, 0, i) # lila
         np.show()
         sleep(auxDelay)
     # fade out counterPeriod/2
     for i in range(auxMaxB2, auxMinB2, -auxIncDown):
         for led_id in range(len(np)):
-            np[led_id] = (i, 0, 0)
+            if idColorType == 0:
+                np[led_id] = (i, 0, 0) # rojo
+            elif idColorType == 1:
+                np[led_id] = (0, i, 0) # verde
+            elif idColorType == 2:
+                np[led_id] = (0, 0, i) # azul
+            elif idColorType == 3:
+                np[led_id] = (i, i, 0) # amarillo
+            elif idColorType == 4:
+                np[led_id] = (0, i, i) # turquesa
+            elif idColorType == 5:
+                np[led_id] = (i, 0, i) # lila
         np.show()
         sleep(auxDelay)
 
@@ -51,12 +72,7 @@ flatSignal = Image("00000:"
              "00050:"
              "00000")
 
-display.show(Image.HEART)
-
-#General Vars
-np = neopixel.NeoPixel(pin1, 8)
-incoming = radio.receive()
-
+display.show(idGeneral)
 
 # Vars MODEA
 bmodeA = 1
@@ -124,33 +140,61 @@ def simulatorPulseNeo( ):
     # update elapsed time since last interaction
     lastTimer = myTimer
     myTimer = myMillis - lastTimer
-    print("myTimer = " + str(myTimer))
+    print("Mode A myTimer = " + str(myTimer))
 
     return
 
 # Vars MODEB
 timeFading = 2000
+simulatorPulseNeo()
 
 def simulatorFade( _timeFading ):
-    global bmodeA
     global minB
     global maxB
 
-    ifCoitusInterruptus()
+    display.show(idGeneral)
 
-    # fade in
-    for i in range(minB, maxB+1, 1):
-        for led_id in range(len(np)):
-            np[led_id] = (i, 0, 0)
-        np.show()
-        sleep(10)
+    if bmodeA == 0:
+        # fade in
+        for i in range(minB, maxB+1, 1):
+            for led_id in range(len(np)):
+                if idColorType == 0:
+                    np[led_id] = (i, 0, 0) # rojo
+                elif idColorType == 1:
+                    np[led_id] = (0, i, 0) # verde
+                elif idColorType == 2:
+                    np[led_id] = (0, 0, i) # azul
+                elif idColorType == 3:
+                    np[led_id] = (i, i, 0) # amarillo
+                elif idColorType == 4:
+                    np[led_id] = (0, i, i) # turquesa
+                elif idColorType == 5:
+                    np[led_id] = (i, 0, i) # lila
+            np.show()
+            sleep(10)
 
-    # fade out
-    for i in range(maxB, minB, -1):
-        for led_id in range(len(np)):
-            np[led_id] = (i, 0, 0)
-        np.show()
-        sleep(10)
+    receiveRadioBehauviour()
+
+    if bmodeA == 0:
+        # fade out
+        for i in range(maxB, minB, -1):
+            for led_id in range(len(np)):
+                if idColorType == 0:
+                    np[led_id] = (i, 0, 0) # rojo
+                elif idColorType == 1:
+                    np[led_id] = (0, i, 0) # verde
+                elif idColorType == 2:
+                    np[led_id] = (0, 0, i) # azul
+                elif idColorType == 3:
+                    np[led_id] = (i, i, 0) # amarillo
+                elif idColorType == 4:
+                    np[led_id] = (0, i, i) # turquesa
+                elif idColorType == 5:
+                    np[led_id] = (i, 0, i) # lila
+            np.show()
+            sleep(10)
+
+    receiveRadioBehauviour()
 
     # clear
     for i in range(len(np)):
@@ -165,33 +209,17 @@ myLastReceivedRadio = running_time()
 
 while True:
 
+    receiveRadioBehauviour()
+
     # After a while without interaction comeback to standby
     if (running_time() - myLastReceivedRadio) > 10000:
         bmodeA = 0
         timePulse = 1000
 
     if bmodeA == 1:
-        print("bmodeA")
+        # print("bmodeA")
         # simulatorPulseNeo( )
         pass
     else:
         print("bmodeB")
         simulatorFade( timeFading )
-
-    receiveRadioBehauviour()
-
-    # If receive Pulse Radio "alienBeat_0" then change to this behauviour while is receiving this input
-    # incoming = radio.receive()
-    # incoming = radio.receive_full()
-    # if incoming == 'alienBeat_0':
-    #     print("received alienBeat_0")
-    #     print("bmodeA")
-    #     bmodeA = 1
-    #     simulatorPulseNeo( )
-        # receivedPuseTimeGap = running_time() - myLastReceivedRadio
-        # if receivedPuseTimeGap < 20000 and receivedPuseTimeGap > 300:
-            # a credible pulse received
-        #    timePulse = receivedPuseTimeGap
-
-        # myLastReceivedRadio = running_time()
-        # bmodeA = 1
