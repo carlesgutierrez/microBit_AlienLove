@@ -11,11 +11,11 @@ radio.config(power=7)           # Turn the signal up to full strengt
 #General Vars
 np = neopixel.NeoPixel(pin1, 8)
 incoming = radio.receive()
-idGeneral = 4
+idGeneral = 2
 tagReveicer = 'alienBeat_'+str(idGeneral)
 
 #0 (rojo) #1 (verde) #2(azul) #(3)amarillo #4(turquesa) #5(lila)
-idColorType = 2
+idColorType = 3
 
 def receiveRadioBehauviour():
     global bmodeA
@@ -151,27 +151,36 @@ simulatorPulseNeo()
 def simulatorFade( _timeFading ):
     global minB
     global maxB
+    idColorTypeAux = idColorType
+    sleepAux = 10
 
     display.show(idGeneral)
+
+    # randomizer
+    if random.randint(0,1) == 1:
+        idColorTypeAux = random.randint(0,4)
+        sleepAux = random.randint(10,30)
+        print("randomizer!")
+
 
     if bmodeA == 0:
         # fade in
         for i in range(minB, maxB+1, 1):
             for led_id in range(len(np)):
-                if idColorType == 0:
+                if idColorTypeAux == 0:
                     np[led_id] = (i, 0, 0) # rojo
-                elif idColorType == 1:
+                elif idColorTypeAux == 1:
                     np[led_id] = (0, i, 0) # verde
-                elif idColorType == 2:
+                elif idColorTypeAux == 2:
                     np[led_id] = (0, 0, i) # azul
-                elif idColorType == 3:
+                elif idColorTypeAux == 3:
                     np[led_id] = (i, i, 0) # amarillo
-                elif idColorType == 4:
+                elif idColorTypeAux == 4:
                     np[led_id] = (0, i, i) # turquesa
-                elif idColorType == 5:
+                elif idColorTypeAux == 5:
                     np[led_id] = (i, 0, i) # lila
             np.show()
-            sleep(10)
+            sleep(sleepAux)
 
     receiveRadioBehauviour()
 
@@ -179,20 +188,20 @@ def simulatorFade( _timeFading ):
         # fade out
         for i in range(maxB, minB, -1):
             for led_id in range(len(np)):
-                if idColorType == 0:
+                if idColorTypeAux == 0:
                     np[led_id] = (i, 0, 0) # rojo
-                elif idColorType == 1:
+                elif idColorTypeAux == 1:
                     np[led_id] = (0, i, 0) # verde
-                elif idColorType == 2:
+                elif idColorTypeAux == 2:
                     np[led_id] = (0, 0, i) # azul
-                elif idColorType == 3:
+                elif idColorTypeAux == 3:
                     np[led_id] = (i, i, 0) # amarillo
-                elif idColorType == 4:
+                elif idColorTypeAux == 4:
                     np[led_id] = (0, i, i) # turquesa
-                elif idColorType == 5:
+                elif idColorTypeAux == 5:
                     np[led_id] = (i, 0, i) # lila
             np.show()
-            sleep(10)
+            sleep(sleepAux)
 
     receiveRadioBehauviour()
 
