@@ -11,10 +11,10 @@ radio.config(power=7)           # Turn the signal up to full strengt
 #General Vars
 np = neopixel.NeoPixel(pin1, 8)
 incoming = radio.receive()
-idGeneral = 2
+idGeneral = 3
 tagReveicer = 'alienBeat_'+str(idGeneral)
 
-#0 (rojo) #1 (verde) #2(azul) #(3)amarillo #4(turquesa) #5(lila)
+#1 (rojo) #2(azul) #(3)amarillo #4(turquesa) #5(lila)
 idColorType = 3
 
 def receiveRadioBehauviour():
@@ -33,10 +33,8 @@ def receiveRadioBehauviour():
 def fadeInFadeOut(auxMinB1, auxMaxB1, auxMinB2, auxMaxB2, auxIncUp, auxIncDown, auxDelay):
     for i in range(auxMinB1, auxMaxB1+1, auxIncUp):
         for led_id in range(len(np)):
-            if idColorType == 0:
+            if idColorType == 1:
                 np[led_id] = (i, 0, 0) # rojo
-            elif idColorType == 1:
-                np[led_id] = (0, i, 0) # verde
             elif idColorType == 2:
                 np[led_id] = (0, 0, i) # azul
             elif idColorType == 3:
@@ -50,10 +48,8 @@ def fadeInFadeOut(auxMinB1, auxMaxB1, auxMinB2, auxMaxB2, auxIncUp, auxIncDown, 
     # fade out counterPeriod/2
     for i in range(auxMaxB2, auxMinB2, -auxIncDown):
         for led_id in range(len(np)):
-            if idColorType == 0:
+            if idColorType == 1:
                 np[led_id] = (i, 0, 0) # rojo
-            elif idColorType == 1:
-                np[led_id] = (0, i, 0) # verde
             elif idColorType == 2:
                 np[led_id] = (0, 0, i) # azul
             elif idColorType == 3:
@@ -158,7 +154,7 @@ def simulatorFade( _timeFading ):
 
     # randomizer
     if random.randint(0,1) == 1:
-        idColorTypeAux = random.randint(0,4)
+        idColorTypeAux = random.randint(1,4)
         sleepAux = random.randint(10,30)
         print("randomizer!")
 
@@ -167,10 +163,8 @@ def simulatorFade( _timeFading ):
         # fade in
         for i in range(minB, maxB+1, 1):
             for led_id in range(len(np)):
-                if idColorTypeAux == 0:
+                if idColorTypeAux == 1:
                     np[led_id] = (i, 0, 0) # rojo
-                elif idColorTypeAux == 1:
-                    np[led_id] = (0, i, 0) # verde
                 elif idColorTypeAux == 2:
                     np[led_id] = (0, 0, i) # azul
                 elif idColorTypeAux == 3:
@@ -188,10 +182,8 @@ def simulatorFade( _timeFading ):
         # fade out
         for i in range(maxB, minB, -1):
             for led_id in range(len(np)):
-                if idColorTypeAux == 0:
+                if idColorTypeAux == 1:
                     np[led_id] = (i, 0, 0) # rojo
-                elif idColorTypeAux == 1:
-                    np[led_id] = (0, i, 0) # verde
                 elif idColorTypeAux == 2:
                     np[led_id] = (0, 0, i) # azul
                 elif idColorTypeAux == 3:
